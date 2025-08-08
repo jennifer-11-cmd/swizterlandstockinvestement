@@ -1,0 +1,92 @@
+<body class="bg-gray-100 text-gray-800 font-sans">
+
+        <!-- Header -->
+        <header class="bg-white shadow-md p-6 flex justify-between items-center">
+                <div class="text-xl font-bold text-indigo-600">ATHEN</div>
+                <a href="#register"
+                        class="bg-indigo-600 text-white px-5 py-2 rounded-md hover:bg-indigo-700 transition">Get
+                        Started</a>
+        </header>
+
+        <!-- Welcome Pane -->
+        <section class="grid md:grid-cols-2 gap-10 items-center px-8 py-20 bg-indigo-100">
+                <div>
+                        <h1 class="text-4xl md:text-5xl font-bold mb-6">Invest in Your Future with Athen</h1>
+                        <p class="text-lg mb-4">Grow your wealth by investing in our USDT-backed plans with guaranteed
+                                returns.</p>
+                        <a href="#register"
+                                class="inline-block mt-4 bg-indigo-600 text-white px-6 py-3 rounded-md hover:bg-indigo-700 transition">Register
+                                Now</a>
+                </div>
+                <img src="https://www.svgrepo.com/show/345030/crypto-wallet.svg" alt="Wallet"
+                        class="w-full max-w-md mx-auto">
+        </section>
+
+        <!-- About -->
+        <section id="about" class="px-6 md:px-20 py-14 bg-white">
+                <h2 class="text-3xl font-bold mb-6">About Athen</h2>
+                <p class="text-lg leading-relaxed">
+                        Athen is a digital investment platform focused on secure and profitable USDT-based plans. We
+                        offer a seamless experience for both beginners and experts looking to diversify and grow their
+                        assets. With our team of financial professionals and transparent strategies, you can invest
+                        confidently and earn passively.
+                </p>
+        </section>
+
+        <!-- Our Services -->
+        <section id="services" class="px-6 md:px-20 py-14 bg-gray-50">
+                <h2 class="text-3xl font-bold mb-10 text-center">Our Services</h2>
+                <div class="grid md:grid-cols-3 gap-10">
+                        <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition">
+                                <img src="https://www.svgrepo.com/show/354202/investment-growth.svg"
+                                        class="w-20 mb-4" />
+                                <h3 class="text-xl font-semibold">Daily ROI</h3>
+                                <p>Enjoy daily returns on your USDT investment without lifting a finger.</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition">
+                                <img src="https://www.svgrepo.com/show/354197/secure-invest.svg" class="w-20 mb-4" />
+                                <h3 class="text-xl font-semibold">Secure Wallets</h3>
+                                <p>All transactions are safe and protected with blockchain-grade encryption.</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition">
+                                <img src="https://www.svgrepo.com/show/348552/referral.svg" class="w-20 mb-4" />
+                                <h3 class="text-xl font-semibold">Referral Program</h3>
+                                <p>Invite others and earn bonuses instantly for every successful referral.</p>
+                        </div>
+                </div>
+        </section>
+
+        <h3 class="text-xl font-semibold mb-2">1. Register an Account</h3>
+        <p>Sign up using your email and set a password to access your dashboard.</p>
+        </div>
+        <div class="bg-indigo-50 p-6 rounded-lg shadow">
+                <h3 class="text-xl font-semibold mb-2">2. Fund Your Wallet</h3>
+                <p>Transfer USDT to the wallet address shown on your dashboard.</p>
+        </div>
+        <div class="bg-indigo-50 p-6 rounded-lg shadow">
+                <h3 class="text-xl font-semibold mb-2">3. Watch It Grow</h3>
+                <p>Start earning daily returns and bonuses from referrals automatically.</p>
+        </div>
+        </div>
+        </section>
+
+        <!-- Investment Plans -->
+        <section class="px-6 md:px-20 py-14 bg-gray-50">
+                <h2 class="text-3xl font-bold mb-6 text-center">Investment Plans</h2>
+                <div class="bg-white max-w-xl mx-auto p-6 rounded-lg shadow text-center">
+                        <h3 class="text-2xl font-semibold mb-4">USDT Plan: $10,000</h3>
+                        <p class="text-lg mb-2">✅ Daily ROI: 2%</p>
+                        <p class="text-lg mb-2">✅ Referral Bonus: 10%</p>
+                        <p class="text-lg mb-6">✅ Withdraw anytime</p>
+                        <a href="#register"
+                                class="bg-indigo-600 text-white px-6 py-3 rounded-md hover:bg-indigo-700 transition">Register</a>
+                        <p class="text-sm mt-2 text-gray-500">*Before you make the plan, register.</p>
+                </div>
+        </section>
+
+        <!-- Contact -->
+        <section id="contact" class="px-6 md:px-20 py-14 bg-white">
+                <h2 class="text-3xl font-bold mb-6">Contact Us</h2>
+                <p>Email: <a href="mailto:support@athen.com" class="text-indigo-600">support@athen.com</a></p>
+                <p>Phone: +234-701-234-5678</p>
+        </section>

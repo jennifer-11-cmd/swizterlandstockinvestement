@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BTC Investment Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body class="bg-gray-900 text-white min-h-screen">
+
+    <!-- HEADER -->
+    <header class="bg-gray-800 shadow-md p-4 flex justify-between items-center">
+        <h1 class="text-2xl font-bold text-yellow-400">BTC Investment Dashboard</h1>
+        <div id="currentTime" class="text-gray-300 text-sm"></div>
+    </header>
+
+    <main class="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <!-- BTC Price Card -->
+        <div class="bg-gray-800 p-6 rounded-2xl shadow-lg col-span-1">
+            <h2 class="text-lg font-semibold mb-2">Bitcoin Price</h2>
+            <p class="text-3xl font-bold text-yellow-400" id="btcPrice">$0.00</p>
+            <span id="btcChange" class="text-sm"></span>
+        </div>
+
+        <!-- Portfolio Overview -->
+        <div class="bg-gray-800 p-6 rounded-2xl shadow-lg col-span-2">
+            <h2 class="text-lg font-semibold mb-4">Portfolio Overview</h2>
+            <div class="grid grid-cols-3 gap-4 text-center">
+                <div>
+                    <p class="text-sm text-gray-400">Invested</p>
+                    <p class="text-xl font-bold" id="investedAmount">$10,000</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-400">Current Value</p>
+                    <p class="text-xl font-bold" id="currentValue">$0.00</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-400">Profit/Loss</p>
+                    <p class="text-xl font-bold" id="profitLoss">$0.00</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- BTC Chart -->
+        <div class="bg-gray-800 p-6 rounded-2xl shadow-lg col-span-2">
+            <h2 class="text-lg font-semibold mb-4">BTC Price Chart</h2>
+            <canvas id="btcChart" height="120"></canvas>
+        </div>
+
+        <!-- Transaction History -->
+        <div class="bg-gray-800 p-6 rounded-2xl shadow-lg col-span-1">
+            <h2 class="text-lg font-semibold mb-4">Transaction History</h2>
+            <table class="w-full text-sm">
+                <thead>
+                    <tr class="text-gray-400 border-b border-gray-700">
+                        <th class="py-2 text-left">Date</th>
+                        <th class="py-2 text-left">Type</th>
+                        <th class="py-2 text-left">Amount</th>
+                    </tr>
+                </thead>
+                <tbody id="transactionTable"></tbody>
+            </table>
+        </div>
+
+    </main>
+
+    <script>
+        const investedAmount = 10000;
+        let btcChart;
+
+        async function fetchBTCData() {
+            try {
+                const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true');
+                const data = await res.json();
+                const price = data.bitcoin.usd;
+                const change = data.bitcoin.usd_24h_change;
+
+                document.getElementById('btcPrice').innerText = $${ price.toLocaleString() };
+                document.getElementById('btcChange').innerText = ${ change.toFixed(2) }% (24h);
+                document.getElementById('btcChange').className = change >= 0 ? "text-green-400 text-sm" : "text-red-400 text-sm";
+
+                const currentValue = (investedAmount / 30000) * price; // Assuming BTC bought at $30,000
+                document.getElementById('currentValue').innerText = $${ currentValue.toLocaleString(undefined, { minimumFractionDigits: 2 }) };
+
+                const profitLoss = currentValue - investedAmount;
+                document.getElementById('profitLoss').innerText = $${ profitLoss.toLocaleString(undefined, { minimumFractionDigits: 2 }) };
+                document.getElementById('profitLoss').className = profitLoss >= 0 ? "text-green-400 text-xl font-bold" : "text-red-400 text-xl font-bold";
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        async function fetchBTCChartData() {
+            try {
+                const res = await fetch('https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=7');
+                const data = await res.json();
+                const prices = data.prices.map(p => ({ time: new Date(p[0]).toLocaleDateString(), value: p[1] }));
+                const ctx = document.getElementById('btcChart').getContext('2d');
+                if (btcChart) btcChart.destroy();
+                btcChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: prices.map(p => p.time),
+                        datasets: [{
+                            label: 'BTC Price (USD)',
+                            data: prices.map(p => p.value),
+                            borderColor: 'rgb(234, 179, 8)',
+                            backgroundColor: 'rgba(234, 179, 8, 0.2)',
+                            fill: true,
+                            tension: 0.3
+                        }]
+                    },
+                    options: { responsive: true, plugins: { legend: { display: false } } }
+                });
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function loadTransactions() {
+            const transactions = [
+                { date: '2025-08-01', type: 'Buy', amount: '$5,000' },
+                { date: '2025-08-03', type: 'Buy', amount: '$5,000' },
+                { date: '2025-08-05', type: 'Sell', amount: '$2,500' }
+            ];
+            const table = document.getElementById('transactionTable');
+            transactions.forEach(t => {
+                const row = <tr class="border-b border-gray-700">
+                    <td class="py-2">${t.date}</td>
+                    <td class="py-2">${t.type}</td>
+                    <td class="py-2">${t.amount}</td>
+                </tr>;
+                table.innerHTML += row;
+            });
+        }
+
+        function updateTime() {
+            document.getElementById('currentTime').innerText = new Date().toLocaleString();
+        }
+
+        // Init
+        fetchBTCData();
+        fetchBTCChartData();
+        loadTransactions();
+        updateTime();
+
+        setInterval(fetchBTCData, 60000);
+        setInterval(updateTime, 1000);
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Athen Investment Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body class="bg-gray-900 text-white min-h-screen">
+    <!-- Header -->
+    <header class="p-4 bg-gray-800 flex justify-between items-center">
+        <h1 class="text-2xl font-bold text-yellow-400">Athen Dashboard</h1>
+        <span id="currentTime" class="text-gray-400"></span>
+    </header>
+
+    <!-- Main -->
+    <main class="p-6 space-y-6">
+        <!-- Coin and Plan Selector -->
+        <div class="grid md:grid-cols-2 gap-6">
+            <div class="bg-gray-800 p-4 rounded-xl">
+                <label class="block text-sm text-gray-400 mb-2">Select Coin</label>
+                <select id="coinSelect" class="w-full p-2 bg-gray-700 rounded">
+                    <option value="bitcoin">Bitcoin (BTC)</option>
+                    <option value="ethereum">Ethereum (ETH)</option>
+                    <option value="tether">Tether (USDT)</option>
+                    <option value="binancecoin">Binance Coin (BNB)</option>
+                </select>
+            </div>
+
+            <div class="bg-gray-800 p-4 rounded-xl">
+                <label class="block text-sm text-gray-400 mb-2">Select Plan</label>
+                <select id="planSelect" class="w-full p-2 bg-gray-700 rounded">
+                    <option value="basic">Basic - $1,000 (5% ROI)</option>
+                    <option value="standard">Standard - $5,000 (7% ROI)</option>
+                    <option value="premium">Premium - $10,000 (10% ROI)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Price & Portfolio -->
+        <div class="grid md:grid-cols-2 gap-6">
+            <div class="bg-gray-800 p-4 rounded-xl">
+                <h2 class="text-lg font-semibold mb-2">Coin Info</h2>
+                <p>Current Price: <span id="coinPrice" class="text-green-400">$0</span></p>
+                <p>24h Change: <span id="coinChange" class="">0%</span></p>
+            </div>
+
+            <div class="bg-gray-800 p-4 rounded-xl">
+                <h2 class="text-lg font-semibold mb-2">Portfolio</h2>
+                <p>Plan Amount: <span id="planAmount" class="text-yellow-400">$1,000</span></p>
+                <p>Expected Monthly ROI: <span id="roi" class="text-green-400">$50</span></p>
+            </div>
+        </div>
+
+        <!-- Wallet -->
+        <div class="bg-gray-800 p-4 rounded-xl">
+            <h2 class="text-lg font-semibold mb-2">Deposit Wallet</h2>
+            <div class="flex items-center justify-between bg-gray-700 p-2 rounded">
+                <span id="walletAddress" class="truncate">bc1qexampleaddress</span>
+                <button onclick="copyWallet()"
+                    class="bg-yellow-500 hover:bg-yellow-600 text-black px-3 py-1 rounded">Copy</button>
+            </div>
+        </div>
+
+        <!-- Chart -->
+        <div class="bg-gray-800 p-4 rounded-xl">
+            <h2 class="text-lg font-semibold mb-4">Price Chart</h2>
+            <canvas id="priceChart" height="100"></canvas>
+        </div>
+    </main>
+
+    <script>
+        const plans = {
+            basic: { amount: 1000, roi: 5 },
+            standard: { amount: 5000, roi: 7 },
+            premium: { amount: 10000, roi: 10 }
+        };
+
+        const wallets = {
+            bitcoin: "bc1qexamplebtcwallet",
+            ethereum: "0xExampleEthWallet",
+            tether: "TetherExampleWallet123",
+            binancecoin: "bnbExampleWallet123"
+        };
+
+        let chart;
+        const ctx = document.getElementById("priceChart").getContext("2d");
+
+        function updateTime() {
+            document.getElementById("currentTime").textContent = new Date().toLocaleTimeString();
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        async function fetchPrice() {
+            const coin = document.getElementById("coinSelect").value;
+            const res = await fetch(https://api.coingecko.com/api/v3/simple/price?ids=${coin}&vs_currencies=usd&include_24hr_change=true);
+      const data = await res.json();
+            const price = data[coin].usd;
+            const change = data[coin].usd_24h_change.toFixed(2);
+            document.getElementById("coinPrice").textContent = $${ price.toLocaleString() };
+            const changeElem = document.getElementById("coinChange");
+            changeElem.textContent = ${ change }%;
+            changeElem.className = change >= 0 ? "text-green-400" : "text-red-400";
+
+            updateWallet(coin);
+            updateChart(price);
+        }
+
+        function updatePlan() {
+            const plan = document.getElementById("planSelect").value;
+            const { amount, roi } = plans[plan];
+            document.getElementById("planAmount").textContent = $${ amount.toLocaleString() };
+            document.getElementById("roi").textContent = $${ (amount * roi / 100).toLocaleString() };
+        }
+
+        function updateWallet(coin) {
+            document.getElementById("walletAddress").textContent = wallets[coin];
+        }
+
+        function copyWallet() {
+            const wallet = document.getElementById("walletAddress").textContent;
+            navigator.clipboard.writeText(wallet);
+            alert("Wallet address copied!");
+        }
+
+        function updateChart(price) {
+            if (!chart) {
+                chart = new Chart(ctx, {
+                    type: "line",
+                    data: {
+                        labels: [],
+                        datasets: [{
+                            label: "Price (USD)",
+                            data: [],
+                            borderColor: "#facc15",
+                            fill: false
+                        }]
+                    },
+                    options: { responsive: true }
+                });
+            }
+            if (chart.data.labels.length > 20) {
+                chart.data.labels.shift();
+                chart.data.datasets[0].data.shift();
+            }
+            chart.data.labels.push(new Date().toLocaleTimeString());
+            chart.data.datasets[0].data.push(price);
+            chart.update();
+        }
+
+        document.getElementById("coinSelect").addEventListener("change", fetchPrice);
+        document.getElementById("planSelect").addEventListener("change", updatePlan);
+
+        fetchPrice();
+        updatePlan();
+        setInterval(fetchPrice, 10000);
+    </script>
+</body>
+
+</html>
