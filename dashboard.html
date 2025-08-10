@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BTC Investment Dashboard</title>
+    <title>Switzerland Investment Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -13,7 +13,7 @@
 
     <!-- HEADER -->
     <header class="bg-gray-800 shadow-md p-4 flex justify-between items-center">
-        <h1 class="text-2xl font-bold text-yellow-400">BTC Investment Dashboard</h1>
+        <h1 class="text-2xl font-bold text-yellow-400">Switzerland Investment Dashboard</h1>
         <div id="currentTime" class="text-gray-300 text-sm"></div>
     </header>
 
@@ -21,7 +21,7 @@
 
         <!-- BTC Price Card -->
         <div class="bg-gray-800 p-6 rounded-2xl shadow-lg col-span-1">
-            <h2 class="text-lg font-semibold mb-2">Bitcoin Price</h2>
+            <h2 class="text-lg font-semibold mb-2">Wallet Balance</h2>
             <p class="text-3xl font-bold text-yellow-400" id="btcPrice">$0.00</p>
             <span id="btcChange" class="text-sm"></span>
         </div>
@@ -32,7 +32,7 @@
             <div class="grid grid-cols-3 gap-4 text-center">
                 <div>
                     <p class="text-sm text-gray-400">Invested</p>
-                    <p class="text-xl font-bold" id="investedAmount">$10,000</p>
+                    <p class="text-xl font-bold" id="investedAmount">$0.00</p>
                 </div>
                 <div>
                     <p class="text-sm text-gray-400">Current Value</p>
@@ -45,11 +45,23 @@
             </div>
         </div>
 
-        <!-- BTC Chart -->
-        <div class="bg-gray-800 p-6 rounded-2xl shadow-lg col-span-2">
-            <h2 class="text-lg font-semibold mb-4">BTC Price Chart</h2>
-            <canvas id="btcChart" height="120"></canvas>
-        </div>
+        <!-- Plan Selection -->
+        <section class="p-6">
+            <label for="planSelect" class="block mb-2">Select Investment Plan</label>
+            <select id="planSelect" class="bg-gray-700 text-white px-3 py-2 rounded w-full">
+                <option value="0">-- Choose a Plan --</option>
+                <option value="100">Starter - $100</option>
+                <option value="500">Silver - $500</option>
+                <option value="1000">Gold - $1,000</option>
+            </select>
+        </section>
+
+        <!-- Actions -->
+        <section class="flex justify-around p-6">
+            <a href="deposit.html"
+                class="bg-green-600 hover:bg-green-500 px-6 py-3 rounded-lg font-semibold">Deposit</a>
+            <a href="withdraw.html" class="bg-red-600 hover:bg-red-500 px-6 py-3 rounded-lg font-semibold">Withdraw</a>
+        </section><br>
 
         <!-- Transaction History -->
         <div class="bg-gray-800 p-6 rounded-2xl shadow-lg col-span-1">
@@ -151,7 +163,39 @@
         setInterval(fetchBTCData, 60000);
         setInterval(updateTime, 1000);
     </script>
+    <script>
+        const coinSelect = document.getElementById('coinSelect');
+        const coinBalance = document.getElementById('coinBalance');
+        const walletAddress = document.getElementById('walletAddress');
+        const planSelect = document.getElementById('planSelect');
+        const investmentAmount = document.getElementById('investmentAmount');
+        const earningsAmount = document.getElementById('earningsAmount');
 
+        const walletAddresses = {
+            BTC: "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
+            ETH: "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
+            USDT: "TGH9x82k9zQh1pK4P2M9Rkz8j3kYzY5UqF"
+        };
+
+        coinSelect.addEventListener('change', () => {
+            coinBalance.textContent = "$0";
+            walletAddress.textContent = "Wallet: " + walletAddresses[coinSelect.value];
+        });
+
+        planSelect.addEventListener('change', () => {
+            const investment = parseInt(planSelect.value);
+            if (investment > 0) {
+                investmentAmount.textContent = $${ investment };
+                earningsAmount.textContent = $${ (investment * 0.2).toFixed(2) };
+                coinBalance.textContent = $${ investment };
+            } else {
+                investmentAmount.textContent = "$0";
+                earningsAmount.textContent = "$0";
+                coinBalance.textContent = "$0";
+            }
+        });
+
+        // Initialize default wallet
+        walletAddress.textContent = "Wallet: " + walletAddresses[coinSelect.value];
+    </script>
 </body>
-
-</html>
