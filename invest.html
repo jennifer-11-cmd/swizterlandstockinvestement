@@ -1,0 +1,21 @@
+<!-- EmailJS Library -->
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
+
+<button onclick="sendEmail()">Send Email</button>
+
+<script>
+    (function () {
+        emailjs.init("YOUR_PUBLIC_KEY"); // Replace with your Public Key
+    })();
+
+    function sendEmail() {
+        emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", {
+            message: "Hello! This email was sent when you clicked the button."
+        })
+            .then(function (response) {
+                alert("✅ Email sent successfully!");
+            }, function (error) {
+                alert("❌ Failed to send email: " + JSON.stringify(error));
+            });
+    }
+</script>

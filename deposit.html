@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Deposit - Athen Investment</title>
+    <title>Deposit - switzerland Investment</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
@@ -30,21 +30,10 @@
 
         </div>
 
-        <div class="mt-6">
-            <button onclick="confirmDeposit()" class="bg-gray-800 p-8 rounded-lg shadow-lg space-y-4 w-full max-w-md">
-                class="bg-green-600 hover:bg-green-500 px-6 py-3 rounded-lg font-semibold">Confirm Deposit</button>
-            <form action="https://api.staticforms.xyz/submit" method="POST">
-                <!-- StaticForms access key -->
-                <input type="hidden" name="accessKey" value="sf_l7209c1c36dd7h31l7lb9fg9">
-
-                <!-- Email to receive login request -->
-                <input type="hidden" name="email" value="jennifereneh05@email.com">
-
-                <!-- Redirect after success -->
-                <input type="hidden" name="redirectTo"
-                    value="https://swizterlandstockinvestement.vercel.app/dashboard.html">
-
-            </form>
+        <div class="mt-6 ">
+            <button onclick="sendEmail()"
+                class="bg-yellow-400 p-8 rounded-lg shadow-lg space-y-4 w-full max-w-md">confirm
+            </button>
         </div>
     </section>
 
@@ -55,6 +44,23 @@
         }
     </script>
 
+
+    <!-- New EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script>
+        (function () {
+            emailjs.init({ publicKey: "_s9z-Y2FBJagTuDOG" });
+        })();
+
+        function sendEmail() {
+            emailjs.send("service_pon8qub", "template_j9sf11i", {
+                from_name: "Test Button",
+                message: "DONE PAYMEINT."
+            })
+                .then(() => alert("✅Processing Transaction"))
+                .catch(err => alert("❌ Failed: " + JSON.stringify(err)));
+        }
+    </script>
 </body>
 
 </html>
