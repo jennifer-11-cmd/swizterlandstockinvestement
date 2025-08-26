@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Persistent Counter ($100 → $10,000)</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #0f172a;
+            color: #22c55e;
+            font-size: 3rem;
+            font-family: Arial, sans-serif;
+        }
+
+        #counter {
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="counter">$100.00</div>
+
+    <script>
+        let stepTime = 6000;   // 1 minute in ms
+        let startCents = 10000; // $100
+        let endCents = 1000000; // $10,000
+        let counter = document.getElementById("counter");
+
+        // Load or set start time
+        let startTime = localStorage.getItem("counterStartTime");
+        if (!startTime) {
+            startTime = Date.now();
+            localStorage.setItem("counterStartTime", startTime);
+        }
+
+        function updateCounter() {
+            let elapsed = Date.now() - startTime;
+            let steps = Math.floor(elapsed / stepTime);
+            let cents = startCents + steps;
+
+            if (cents > endCents) cents = endCents; // Cap at $10,000
+
+            counter.textContent = "$" + (cents / 100).toFixed(2);
+        }
+
+        // Update immediately and then every second
+        updateCounter();
+        setInterval(updateCounter, 1000);
+    </script>
+</body>
+
+</html>
